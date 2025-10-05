@@ -1,11 +1,19 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {Document, Page, pdfjs} from "react-pdf";
-import {ChevronLeft, ChevronRight, Download, Loader2, X, ZoomIn, ZoomOut} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {Card} from "@/components/ui/card";
-import {useLanguage} from "@/components/providers/language-provider";
+import React, { useEffect, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Loader2,
+  X,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useLanguage } from "@/components/providers/language-provider";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -22,7 +30,7 @@ const getDefaultScale = (): number => {
   if (typeof window === "undefined") return 1.0;
   // Mobile: < 768px -> 60%
   // Tablet/Desktop: >= 768px -> 100%
-  return window.innerWidth < 768 ? 0.6 : 1.0;
+  return window.innerWidth < 768 ? 0.55 : 1.0;
 };
 
 export function PDFViewer({ file, onClose }: PDFViewerProps) {
@@ -75,7 +83,7 @@ export function PDFViewer({ file, onClose }: PDFViewerProps) {
   };
 
   const zoomIn = () => {
-    setScale((prev) => Math.min(prev + 0.2, 3.0));
+    setScale((prev) => (prev === 0.55 ? 0.6 : Math.min(prev + 0.2, 3.0)));
   };
 
   const zoomOut = () => {
@@ -95,108 +103,110 @@ export function PDFViewer({ file, onClose }: PDFViewerProps) {
 
   return (
     <div className="space-y-4">
-      <Card className="p-4">
-        <div className="flex flex-wrap items-center justify-center gap-4 md:justify-between">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={goToPrevPage}
-              disabled={pageNumber <= 1}
-              title={t.previousPage}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm font-medium">
-              {t.page} {pageNumber} {t.of} {numPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={goToNextPage}
-              disabled={pageNumber >= numPages}
-              title={t.nextPage}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+      <Card className={"p-4"}>
+        <CardContent className={"p-0"}>
+          <div className="flex flex-wrap items-center justify-center gap-4 md:justify-between">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={goToPrevPage}
+                disabled={pageNumber <= 1}
+                title={t.previousPage}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium">
+                {t.page} {pageNumber} {t.of} {numPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={goToNextPage}
+                disabled={pageNumber >= numPages}
+                title={t.nextPage}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={zoomOut}
-              disabled={scale <= 0.5}
-              title={t.zoomOut}
-            >
-              <ZoomOut className="h-4 w-4" />
-            </Button>
-            <span className="text-sm font-medium">
-              {Math.round(scale * 100)}%
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={zoomIn}
-              disabled={scale >= 3.0}
-              title={t.zoomIn}
-            >
-              <ZoomIn className="h-4 w-4" />
-            </Button>
-          </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={zoomOut}
+                disabled={scale <= 0.5}
+                title={t.zoomOut}
+              >
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium">
+                {Math.round(scale * 100)}%
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={zoomIn}
+                disabled={scale >= 3.0}
+                title={t.zoomIn}
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+            </div>
 
-          <div className="flex items-center gap-2 justify-center w-full md:w-fit">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={downloadFile}
-              title={t.download}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              {t.download}
-            </Button>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={onClose}
-              title={t.closeFile}
-            >
-              <X className="mr-2 h-4 w-4" />
-              {t.closeFile}
-            </Button>
+            <div className="flex w-full items-center justify-center gap-2 md:w-fit">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={downloadFile}
+                title={t.download}
+              >
+                <Download className="mr-2 h-4 w-4" />
+                {t.download}
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={onClose}
+                title={t.closeFile}
+              >
+                <X className="mr-2 h-4 w-4" />
+                {t.closeFile}
+              </Button>
+            </div>
           </div>
-        </div>
+        </CardContent>
       </Card>
 
-      <Card className="overflow-auto">
-          <div>
+      <Card className="overflow-auto py-4">
+        <CardContent className={"px-0"}>
           {loading && (
             <div className="flex items-center justify-center p-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Loader2 className="text-primary h-8 w-8 animate-spin" />
             </div>
           )}
-              <div className="inline-block min-w-full">
-                  <div className="flex justify-center mx-4">
-                      <Document
-                          file={file}
-                          onLoadSuccess={onDocumentLoadSuccess}
-                          onLoadError={onDocumentLoadError}
-                          loading={
-                              <div className="flex items-center justify-center p-12">
-                                  <Loader2 className="h-8 w-8 animate-spin text-primary"/>
-                              </div>
-                          }
-                      >
-                          <Page
-                              pageNumber={pageNumber}
-                              scale={scale}
-                              renderTextLayer={true}
-                              renderAnnotationLayer={true}
-                          />
-                      </Document>
+          <div className="inline-block min-w-full">
+            <div className="mx-4 flex justify-center">
+              <Document
+                file={file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadError={onDocumentLoadError}
+                loading={
+                  <div className="flex items-center justify-center p-12">
+                    <Loader2 className="text-primary h-8 w-8 animate-spin" />
                   </div>
-              </div>
-        </div>
+                }
+              >
+                <Page
+                  pageNumber={pageNumber}
+                  scale={scale}
+                  renderTextLayer={true}
+                  renderAnnotationLayer={true}
+                />
+              </Document>
+            </div>
+          </div>
+        </CardContent>
       </Card>
     </div>
   );
