@@ -3,11 +3,16 @@
 import React, { useState } from "react";
 import { FileText } from "lucide-react";
 import { PDFUpload } from "@/components/pdf-upload";
-import { PDFViewer } from "@/components/pdf-viewer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useLanguage } from "@/components/providers/language-provider";
+import dynamic from "next/dynamic";
+import { PDFViewerProps } from "@/components/pdf-viewer";
 
+const PDFViewer = dynamic<PDFViewerProps>(
+  () => import("@/components/pdf-viewer").then((mod) => mod.PDFViewer),
+  { ssr: false }
+);
 export default function Home() {
   const { t } = useLanguage();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
