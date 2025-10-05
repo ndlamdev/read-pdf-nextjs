@@ -17,16 +17,43 @@ export interface PDFViewerProps {
   onClose: () => void;
 }
 
+// Helper function to get default scale based on screen size
+const getDefaultScale = (): number => {
+  if (typeof window === "undefined") return 1.0;
+  // Mobile: < 768px -> 60%
+  // Tablet/Desktop: >= 768px -> 100%
+  return window.innerWidth < 768 ? 0.6 : 1.0;
+};
+
 export function PDFViewer({ file, onClose }: PDFViewerProps) {
   const { t } = useLanguage();
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [scale, setScale] = useState<number>(1.0);
+  const [scale, setScale] = useState<number>(getDefaultScale());
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Set initial scale and handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const newScale = getDefaultScale();
+      setScale(newScale);
+    };
+
+    // Set initial scale
+    handleResize();
+
+    // Add resize listener
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Reset page number and scale when file changes
   useEffect(() => {
     setPageNumber(1);
-    setScale(1.0);
+    setScale(getDefaultScale());
   }, [file]);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
@@ -69,7 +96,7 @@ export function PDFViewer({ file, onClose }: PDFViewerProps) {
   return (
     <div className="space-y-4">
       <Card className="p-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:justify-between">
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -118,7 +145,7 @@ export function PDFViewer({ file, onClose }: PDFViewerProps) {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-center w-full md:w-fit">
             <Button
               variant="outline"
               size="sm"
