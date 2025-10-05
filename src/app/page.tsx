@@ -52,7 +52,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-12 text-center text-sm text-muted-foreground">
           <p>
-            Built with Next.js 15.5.4, React PDF, Tailwind CSS, and shadcn/ui
+            {t.footerPage}
           </p>
         </footer>
       </div>

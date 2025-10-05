@@ -18,7 +18,11 @@ export const translations = {
     download: "Tải xuống",
     closeFile: "Đóng file",
     error: "Lỗi khi tải file PDF",
-    invalidFile: "Vui lòng chọn file PDF hợp lệ"
+    invalidFile: "Vui lòng chọn file PDF hợp lệ",
+    language: "Ngôn ngữ",
+    vietnamese: "Tiếng Việt",
+    english: "Tiếng Anh",
+    footerPage: "Xây bằng Next.js 15, React PDF, Tailwind CSS, và shadcn/ui"
   },
   en: {
     title: "PDF Reader",
@@ -37,8 +41,12 @@ export const translations = {
     download: "Download",
     closeFile: "Close file",
     error: "Error loading PDF file",
-    invalidFile: "Please select a valid PDF file"
-  }
+    invalidFile: "Please select a valid PDF file",
+    language: "Language",
+    vietnamese: "Vietnamese",
+    english: "English",
+    footerPage: "Built with Next.js 15, React PDF, Tailwind CSS, and shadcn/ui"
+  },
 };
 
 export function getTranslations(lang: Language) {
