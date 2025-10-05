@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { ChevronLeft, ChevronRight, Download, Loader2, X, ZoomIn, ZoomOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { useLanguage } from "@/components/providers/language-provider";
+import React, {useEffect, useState} from "react";
+import {Document, Page, pdfjs} from "react-pdf";
+import {ChevronLeft, ChevronRight, Download, Loader2, X, ZoomIn, ZoomOut} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {Card} from "@/components/ui/card";
+import {useLanguage} from "@/components/providers/language-provider";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
@@ -169,30 +169,33 @@ export function PDFViewer({ file, onClose }: PDFViewerProps) {
       </Card>
 
       <Card className="overflow-auto">
-        <div className="flex justify-center p-4">
+          <div>
           {loading && (
             <div className="flex items-center justify-center p-12">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
-          <Document
-            file={file}
-            onLoadSuccess={onDocumentLoadSuccess}
-            onLoadError={onDocumentLoadError}
-            loading={
-              <div className="flex items-center justify-center p-12">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <div className="inline-block min-w-full">
+                  <div className="flex justify-center mx-4">
+                      <Document
+                          file={file}
+                          onLoadSuccess={onDocumentLoadSuccess}
+                          onLoadError={onDocumentLoadError}
+                          loading={
+                              <div className="flex items-center justify-center p-12">
+                                  <Loader2 className="h-8 w-8 animate-spin text-primary"/>
+                              </div>
+                          }
+                      >
+                          <Page
+                              pageNumber={pageNumber}
+                              scale={scale}
+                              renderTextLayer={true}
+                              renderAnnotationLayer={true}
+                          />
+                      </Document>
+                  </div>
               </div>
-            }
-          >
-            <Page
-              pageNumber={pageNumber}
-              scale={scale}
-              renderTextLayer={true}
-              renderAnnotationLayer={true}
-              className="mx-auto"
-            />
-          </Document>
         </div>
       </Card>
     </div>
